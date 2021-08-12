@@ -43,7 +43,7 @@ def file2link(bot: DeltaBot, message: Message, replies: Replies) -> None:
                     name = os.path.basename(message.filename)
                     size = _get_size(message.filename)
                     replies.add(
-                        text=f"Name: {name}\nSize: {size}\nLink:{resp.text.strip()}"
+                        text=f"Name: {name}\nSize: {size}\nLink: {resp.text.strip()}"
                     )
         except requests.RequestException:
             replies.add(text="❌ Failed to upload file", quote=message)
