@@ -32,16 +32,18 @@ def deltabot_init(bot: DeltaBot) -> None:
 def file2link(bot: DeltaBot, message: Message, replies: Replies) -> None:
     """Send me any file in private and I will upload it and give you a download link that you can share with others."""
     if not message.chat.is_group() and message.filename:
-        rep = Replies(message, bot.logger)
-        rep.add(text="⬆️ Uploading...", quote=message)
-        rep.send_reply_messages()
+        num = os.stat(message.filename).st_size
+        if num > 1024**2:
+            rep = Replies(message, bot.logger)
+            rep.add(text="⬆️ Uploading...", quote=message)
+            rep.send_reply_messages()
         url = _getdefault(bot, "server")
         try:
             with open(message.filename, "rb") as file:
                 with session.post(url, files=dict(file=file)) as resp:
                     resp.raise_for_status()
                     name = os.path.basename(message.filename)
-                    size = _get_size(message.filename)
+                    size = _sizeof_fmt(num)
                     replies.add(
                         text=f"Name: {name}\nSize: {size}\nLink: {resp.text.strip()}"
                     )
@@ -57,8 +59,7 @@ def _getdefault(bot: DeltaBot, key: str, value: str = None) -> str:
     return val
 
 
-def _get_size(path: str) -> str:
-    num: float = os.stat(path).st_size
+def _sizeof_fmt(num: float) -> str:
     suffix = "B"
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
         if abs(num) < 1024.0:
