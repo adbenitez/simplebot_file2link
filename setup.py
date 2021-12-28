@@ -2,7 +2,7 @@
 
 import os
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 def load_requirements(path: str) -> list:
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         ],
         zip_safe=False,
         include_package_data=True,
-        py_modules=[MODULE_NAME],
+        packages=find_packages(),
         install_requires=load_requirements("requirements/requirements.txt"),
         extras_require={
             "test": load_requirements("requirements/requirements-test.txt"),
