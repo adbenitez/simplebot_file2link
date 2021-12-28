@@ -1,7 +1,10 @@
+from simplebot_file2link import _getdefault
+
+
 class TestPlugin:
     """Offline tests"""
 
-    def test_filter(self, mocker, requests_mock):
+    def test_filter(self, mocker, requests_mock) -> None:
         requests_mock.post(_getdefault(mocker.bot, "server"), text="test1")
 
         msg = mocker.get_one_reply(filename="file.txt")
