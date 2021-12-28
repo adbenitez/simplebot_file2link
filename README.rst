@@ -23,7 +23,7 @@ A `SimpleBot`_ plugin that will upload to the cloud any file sent by the users i
 
 By default the bot will upload the files to https://0x0.st/, you can change the server with::
 
-    simplebot -a bot@example.com db simplebot_file2link/server "https://example.com"
+    simplebot -a bot@example.com db -s simplebot_file2link/server "https://example.com"
 
 Install
 -------
