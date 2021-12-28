@@ -6,14 +6,8 @@ import os
 import requests
 import simplebot
 from deltachat import Message
-from pkg_resources import DistributionNotFound, get_distribution
 from simplebot.bot import DeltaBot, Replies
 
-try:
-    __version__ = get_distribution(__name__).version
-except DistributionNotFound:
-    # package is not installed
-    __version__ = "0.0.0.dev0-unknown"
 session = requests.Session()
 session.headers.update(
     {
@@ -66,21 +60,3 @@ def _sizeof_fmt(num: float) -> str:
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
     return "%.1f%s%s" % (num, "Yi", suffix)
-
-
-class TestPlugin:
-    """Offline tests"""
-
-    def test_filter(self, mocker, requests_mock):
-        requests_mock.post(_getdefault(mocker.bot, "server"), text="test1")
-
-        msg = mocker.get_one_reply(filename="file.txt")
-        assert "test1" in msg.text
-
-        # bot should only upload files sent in private
-        msgs = mocker.get_replies(filename="file.txt", group="TestGroup")
-        assert not msgs
-
-        # there is no file, message should be ignored
-        msgs = mocker.get_replies(text="hello")
-        assert not msgs

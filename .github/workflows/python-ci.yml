@@ -35,7 +35,7 @@ jobs:
         pylama
     - name: Test with pytest
       run: |
-        pytest *.py
+        pytest
 
   deploy:
     needs: test
