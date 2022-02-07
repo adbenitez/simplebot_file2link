@@ -21,9 +21,10 @@ File2Link
 
 A `SimpleBot`_ plugin that will upload to the cloud any file sent by the users in private.
 
-By default the bot will upload the files to https://0x0.st/, you can change the server with::
+You can set a list of URLs separated by space, that the bot can use to upload the file, the bot will pick
+one randomly, you can change the default list with::
 
-    simplebot -a bot@example.com db -s simplebot_file2link/server "https://example.com"
+    simplebot -a bot@example.com db -s simplebot_file2link/server "https://example.com https://example2.org"
 
 Install
 -------

@@ -2,6 +2,7 @@
 
 import functools
 import os
+import random
 
 import requests
 import simplebot
@@ -19,7 +20,9 @@ session.request = functools.partial(session.request, timeout=60 * 5)  # type: ig
 
 @simplebot.hookimpl
 def deltabot_init(bot: DeltaBot) -> None:
-    _getdefault(bot, "server", "https://0x0.st/")
+    _getdefault(
+        bot, "server", "https://0x0.st/ https://ttm.sh/ https://envs.sh/ https://x0.at/"
+    )
 
 
 @simplebot.filter
@@ -31,19 +34,22 @@ def file2link(bot: DeltaBot, message: Message, replies: Replies) -> None:
             rep = Replies(message, bot.logger)
             rep.add(text="⬆️ Uploading...", quote=message)
             rep.send_reply_messages()
-        url = _getdefault(bot, "server")
-        try:
-            with open(message.filename, "rb") as file:
-                with session.post(url, files=dict(file=file)) as resp:
-                    resp.raise_for_status()
-                    name = os.path.basename(message.filename)
-                    size = _sizeof_fmt(num)
-                    replies.add(
-                        text=f"Name: {name}\nSize: {size}\nLink: {resp.text.strip()}"
-                    )
-        except requests.RequestException as ex:
-            bot.logger.exception(ex)
-            replies.add(text="❌ Failed to upload file", quote=message)
+        urls = _getdefault(bot, "server").split()
+        while urls:
+            url = urls.pop(random.randrange(len(urls)))
+            try:
+                with open(message.filename, "rb") as file:
+                    with session.post(url, files=dict(file=file)) as resp:
+                        resp.raise_for_status()
+                        name = os.path.basename(message.filename)
+                        size = _sizeof_fmt(num)
+                        replies.add(
+                            text=f"Name: {name}\nSize: {size}\nLink: {resp.text.strip()}"
+                        )
+                        return
+            except requests.RequestException as ex:
+                bot.logger.exception(ex)
+        replies.add(text="❌ Failed to upload file", quote=message)
 
 
 def _getdefault(bot: DeltaBot, key: str, value: str = None) -> str:

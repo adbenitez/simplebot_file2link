@@ -1,6 +1,11 @@
 Changelog
 =========
 
+`Unreleased`_
+-------------
+
+- add more cloud servers, pick one randomly
+
 1.0.0
 -----
 
