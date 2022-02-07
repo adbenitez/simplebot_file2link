@@ -27,7 +27,7 @@ def file2link(bot: DeltaBot, message: Message, replies: Replies) -> None:
     """Send me any file in private and I will upload it and give you a download link that you can share with others."""
     if not message.chat.is_group() and message.filename:
         num = os.stat(message.filename).st_size
-        if num > 1024 ** 2:
+        if num > 1024**2:
             rep = Replies(message, bot.logger)
             rep.add(text="⬆️ Uploading...", quote=message)
             rep.send_reply_messages()
@@ -41,7 +41,8 @@ def file2link(bot: DeltaBot, message: Message, replies: Replies) -> None:
                     replies.add(
                         text=f"Name: {name}\nSize: {size}\nLink: {resp.text.strip()}"
                     )
-        except requests.RequestException:
+        except requests.RequestException as ex:
+            bot.logger.exception(ex)
             replies.add(text="❌ Failed to upload file", quote=message)
 
 
