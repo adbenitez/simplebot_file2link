@@ -5,7 +5,8 @@ class TestPlugin:
     """Offline tests"""
 
     def test_filter(self, mocker, requests_mock) -> None:
-        requests_mock.post(_getdefault(mocker.bot, "server"), text="test1")
+        for server in _getdefault(mocker.bot, "server").split():
+            requests_mock.post(server, text="test1")
 
         msg = mocker.get_one_reply(filename="file.txt")
         assert "test1" in msg.text
