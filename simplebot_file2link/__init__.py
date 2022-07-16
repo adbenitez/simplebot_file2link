@@ -28,7 +28,7 @@ def deltabot_init(bot: DeltaBot) -> None:
 @simplebot.filter
 def file2link(bot: DeltaBot, message: Message, replies: Replies) -> None:
     """Send me any file in private and I will upload it and give you a download link that you can share with others."""
-    if not message.chat.is_group() and message.filename:
+    if not message.chat.is_multiuser() and message.filename:
         num = os.stat(message.filename).st_size
         if num > 1024**2:
             rep = Replies(message, bot.logger)
